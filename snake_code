@@ -1,0 +1,847 @@
+import pygame
+import sys
+import random
+
+pygame.init()
+
+WHITE = (240, 230, 140)
+GR = (34, 139, 34)
+screen = pygame.display.set_mode((500, 500))
+pygame.display.set_caption('Змейка')
+background_image = pygame.image.load("background.jpg")
+background_image = pygame.transform.scale(background_image, (500, 500))
+
+
+def draw_text(text, font, color, surface, x, y):
+    text_obj = font.render(text, True, color)
+    text_rect = text_obj.get_rect()
+    text_rect.center = (x, y)
+    surface.blit(text_obj, text_rect)
+
+
+def get_high_score():
+    e = []
+    f = [x for x in open('scores.txt')]
+    for i in f:
+        e.append(i[:-1])
+    return max(e)
+
+
+def get_high_score2():
+    e = []
+    f = [x for x in open('scores2.txt')]
+    for i in f:
+        e.append(i[:-1])
+    return max(e)
+
+
+def get_high_score3():
+    e = []
+    f = [x for x in open('scores3.txt')]
+    for i in f:
+        e.append(i[:-1])
+    return max(e)
+
+
+running = True
+while running:
+    screen.blit(background_image, (0, 0))
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_pos = pygame.mouse.get_pos()
+            if start_button_rect.collidepoint(mouse_pos):
+                pygame.init()
+
+                WHITE = (240, 230, 140)
+                GR = (34, 139, 34)
+
+                screen = pygame.display.set_mode((500, 500))
+                pygame.display.set_caption('Змейка')
+
+
+                def draw_text(text, font, color, surface, x, y):
+                    text_obj = font.render(text, True, color)
+                    text_rect = text_obj.get_rect()
+                    text_rect.center = (x, y)
+                    surface.blit(text_obj, text_rect)
+
+
+                running = True
+                while running:
+                    screen.blit(background_image, (0, 0))
+                    for i in pygame.event.get():
+                        if i.type == pygame.QUIT:
+                            pygame.quit()
+                            sys.exit()
+
+                        if i.type == pygame.MOUSEBUTTONDOWN:
+                            mouse_pos = pygame.mouse.get_pos()
+                            if start_button_rect.collidepoint(mouse_pos):
+                                pygame.init()
+                                white = (255, 255, 255)
+                                yellow = (255, 255, 102)
+                                black = (0, 0, 0)
+                                red = (213, 50, 80)
+                                green = (0, 255, 0)
+                                blue = (50, 153, 213)
+                                width = 500
+                                height = 500
+                                block = 10
+                                score_font = pygame.font.Font(None, 24)
+                                bk = pygame.display.set_mode((width, height))
+                                pygame.display.set_caption('Змейка')
+                                clock = pygame.time.Clock()
+                                background_image = pygame.image.load("background.jpg")
+                                background_image = pygame.transform.scale(background_image, (width, height))
+                                font_style = pygame.font.SysFont(None, 50)
+                                food_image = pygame.image.load("food.png")
+                                food_image = pygame.transform.scale(food_image, (block, block))
+                                snake_block_image = pygame.image.load("snake_block.png")
+                                snake_block_image = pygame.transform.scale(snake_block_image, (block, block))
+                                wall_image = pygame.image.load("wall.png")
+                                wall_image = pygame.transform.scale(wall_image, (block, block))
+
+
+                                def message(msg, color):
+                                    mesg = font_style.render(msg, True, color)
+                                    bk.blit(mesg, [width / 6, height / 3])
+
+
+                                def our_snake(block, snake_list):
+                                    for x in snake_list:
+                                        bk.blit(snake_block_image, (x[0], x[1]))
+
+
+                                def Your_score(score):
+                                    value = score_font.render("Ваш счёт: " + str(score), True, yellow)
+                                    bk.blit(value, [10, 10])
+
+
+                                def gameLoop():
+                                    score = 0
+                                    game_over = False
+                                    game_close = False
+                                    x1 = width / 2
+                                    y1 = height / 2
+                                    x1_change = 0
+                                    y1_change = 0
+                                    snake_List = []
+                                    Length_of_snake = 1
+                                    wall_layout = [
+                                        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                                    ]
+                                    while True:
+                                        foodx = round(random.randrange(0, width - block) / block) * block
+                                        foody = round(random.randrange(0, height - block) / block) * block
+                                        if foodx % block == 0 and foody % block == 0:
+                                            if not wall_layout[int(foody / block)][int(foodx / block)] == "X":
+                                                break
+
+                                    while not game_over:
+                                        while game_close == True:
+                                            bk.blit(background_image, (0, 0))
+                                            message("Q Выйти W Играть", red)
+                                            pygame.display.update()
+                                            for event in pygame.event.get():
+                                                if event.type == pygame.KEYDOWN:
+                                                    if event.key == pygame.K_q:
+                                                        game_over = True
+                                                        game_close = False
+                                                    if event.key == pygame.K_w:
+                                                        gameLoop()
+                                        for event in pygame.event.get():
+                                            if event.type == pygame.QUIT:
+                                                game_over = True
+                                            if event.type == pygame.KEYDOWN:
+                                                if event.key == pygame.K_LEFT:
+                                                    x1_change = -block
+                                                    y1_change = 0
+                                                elif event.key == pygame.K_RIGHT:
+                                                    x1_change = block
+                                                    y1_change = 0
+                                                elif event.key == pygame.K_UP:
+                                                    y1_change = -block
+                                                    x1_change = 0
+                                                elif event.key == pygame.K_DOWN:
+                                                    y1_change = block
+                                                    x1_change = 0
+                                        if x1 >= width or x1 < 0 or y1 >= height or y1 < 0:
+                                            game_close = True
+                                        if [x1, y1] in snake_List[:-1]:
+                                            game_close = True
+                                        x1 += x1_change
+                                        y1 += y1_change
+                                        snake_Head = []
+                                        snake_Head.append(x1)
+                                        snake_Head.append(y1)
+                                        snake_List.append(snake_Head)
+                                        pygame.time.delay(100)
+                                        if len(snake_List) > Length_of_snake:
+                                            del snake_List[0]
+
+                                        bk.blit(background_image, (0, 0))
+                                        bk.blit(food_image, (foodx, foody))
+                                        our_snake(block, snake_List)
+                                        if x1 == foodx and y1 == foody:
+                                            while True:
+                                                foodx = round(random.randrange(0, width - block) / block) * block
+                                                foody = round(random.randrange(0, height - block) / block) * block
+                                                if foodx % block == 0 and foody % block == 0:
+                                                    if not wall_layout[int(foody / block)][int(foodx / block)] == "X":
+                                                        break
+                                            Length_of_snake += 1
+                                            score += 1
+                                        for i in range(len(wall_layout)):
+                                            for j in range(len(wall_layout[i])):
+                                                if wall_layout[i][j] == "X" and x1 == j * block and y1 == i * block:
+                                                    game_close = True
+                                        for i in range(len(wall_layout)):
+                                            for j in range(len(wall_layout[i])):
+                                                if wall_layout[i][j] == "X":
+                                                    bk.blit(wall_image, ([j * block, i * block, block, block]))
+                                        pygame.draw.rect(bk, red, [foodx, foody, block, block])
+                                        bk.blit(food_image, (foodx, foody))
+                                        our_snake(block, snake_List)
+                                        Your_score(Length_of_snake - 1)
+                                        pygame.display.update()
+                                        clock.tick(20)
+                                    with open('scores.txt', 'a') as file:
+                                        file.write(str(score) + '\n')
+                                    pygame.quit()
+                                    quit()
+
+
+                                gameLoop()
+
+                            elif button_rect1.collidepoint(mouse_pos):
+                                pygame.init()
+                                white = (255, 255, 255)
+                                yellow = (255, 255, 102)
+                                black = (0, 0, 0)
+                                red = (213, 50, 80)
+                                green = (0, 255, 0)
+                                blue = (50, 153, 213)
+                                width = 500
+                                height = 500
+                                block = 10
+                                score_font = pygame.font.Font(None, 24)
+                                dis = pygame.display.set_mode((width, height))
+                                pygame.display.set_caption('Змейка')
+                                clock = pygame.time.Clock()
+                                background_image = pygame.image.load("background.jpg")
+                                background_image = pygame.transform.scale(background_image, (width, height))
+                                font_style = pygame.font.SysFont(None, 50)
+                                food_image = pygame.image.load("food.png")
+                                food_image = pygame.transform.scale(food_image, (block, block))
+                                snake_block_image = pygame.image.load("snake_block.png")
+                                snake_block_image = pygame.transform.scale(snake_block_image, (block, block))
+                                wall_image = pygame.image.load("wall.png")
+                                wall_image = pygame.transform.scale(wall_image, (block, block))
+
+
+                                def message(msg, color):
+                                    mesg = font_style.render(msg, True, color)
+                                    dis.blit(mesg, [width / 6, height / 3])
+
+
+                                def our_snake(block, snake_list):
+                                    for x in snake_list:
+                                        dis.blit(snake_block_image, (x[0], x[1]))
+
+
+                                def Your_score(score):
+                                    value = score_font.render("Ваш счёт: " + str(score), True, yellow)
+                                    dis.blit(value, [10, 10])
+
+
+                                def gameLoop():
+                                    score = 0
+                                    game_over = False
+                                    game_close = False
+                                    x1 = width / 2
+                                    y1 = height / 2
+                                    x1_change = 0
+                                    y1_change = 0
+                                    snake_List = []
+                                    Length_of_snake = 1
+                                    wall_layout = [
+                                        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X...................................XXXX.........X",
+                                        "X...................................X............X",
+                                        "X...XXXXXXXXXXXXXX..................X............X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X......................XXXXXXXXXXXXXXXX..........X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X...................XXXXXXX......................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X...................................X............X",
+                                        "X...................................X............X",
+                                        "X...............XXXXX...............X............X",
+                                        "X...................................X............X",
+                                        "X......X............................X............X",
+                                        "X......X.........................................X",
+                                        "X......X.........................................X",
+                                        "X......X.........................................X",
+                                        "X................................XXXXXXXXXX......X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X.................XXXXXXXXX..............X.......X",
+                                        "X........................................X.......X",
+                                        "X.....XXX................................X.......X",
+                                        "X.......X...........................XXX.XX.......X",
+                                        "X.......X...........................X............X",
+                                        "X.......X...........................X............X",
+                                        "X.......XXXXXXXXX...................X............X",
+                                        "X...................................X............X",
+                                        "X...................................X............X",
+                                        "X...................................X............X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X..................X.............................X",
+                                        "X.............XXXXXX..XXXX.............XXX.......X",
+                                        "X........................X.......................X",
+                                        "X................................................X",
+                                        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                                    ]
+                                    while True:
+                                        foodx = round(random.randrange(0, width - block) / block) * block
+                                        foody = round(random.randrange(0, height - block) / block) * block
+                                        if foodx % block == 0 and foody % block == 0:
+                                            if not wall_layout[int(foody / block)][int(foodx / block)] == "X":
+                                                break
+
+                                    while not game_over:
+                                        while game_close == True:
+                                            dis.blit(background_image, (0, 0))
+                                            message("Q Выйти W Играть", red)
+                                            pygame.display.update()
+                                            for event in pygame.event.get():
+                                                if event.type == pygame.KEYDOWN:
+                                                    if event.key == pygame.K_q:
+                                                        game_over = True
+                                                        game_close = False
+                                                    if event.key == pygame.K_w:
+                                                        gameLoop()
+                                        for event in pygame.event.get():
+                                            if event.type == pygame.QUIT:
+                                                game_over = True
+                                            if event.type == pygame.KEYDOWN:
+                                                if event.key == pygame.K_LEFT:
+                                                    x1_change = -block
+                                                    y1_change = 0
+                                                elif event.key == pygame.K_RIGHT:
+                                                    x1_change = block
+                                                    y1_change = 0
+                                                elif event.key == pygame.K_UP:
+                                                    y1_change = -block
+                                                    x1_change = 0
+                                                elif event.key == pygame.K_DOWN:
+                                                    y1_change = block
+                                                    x1_change = 0
+                                        if x1 >= width or x1 < 0 or y1 >= height or y1 < 0:
+                                            game_close = True
+                                        if [x1, y1] in snake_List[:-1]:
+                                            game_close = True
+                                        x1 += x1_change
+                                        y1 += y1_change
+                                        snake_Head = []
+                                        snake_Head.append(x1)
+                                        snake_Head.append(y1)
+                                        snake_List.append(snake_Head)
+                                        pygame.time.delay(70)
+                                        if len(snake_List) > Length_of_snake:
+                                            del snake_List[0]
+
+                                        dis.blit(background_image, (0, 0))
+                                        dis.blit(food_image, (foodx, foody))
+                                        our_snake(block, snake_List)
+                                        if x1 == foodx and y1 == foody:
+                                            while True:
+                                                foodx = round(random.randrange(0, width - block) / block) * block
+                                                foody = round(random.randrange(0, height - block) / block) * block
+                                                if foodx % block == 0 and foody % block == 0:
+                                                    if not wall_layout[int(foody / block)][int(foodx / block)] == "X":
+                                                        break
+                                            Length_of_snake += 1
+                                            score += 1
+                                        for i in range(len(wall_layout)):
+                                            for j in range(len(wall_layout[i])):
+                                                if wall_layout[i][j] == "X" and x1 == j * block and y1 == i * block:
+                                                    game_close = True
+                                        for i in range(len(wall_layout)):
+                                            for j in range(len(wall_layout[i])):
+                                                if wall_layout[i][j] == "X":
+                                                    dis.blit(wall_image, ([j * block, i * block, block, block]))
+                                        pygame.draw.rect(dis, red, [foodx, foody, block, block])
+                                        dis.blit(food_image, (foodx, foody))
+                                        our_snake(block, snake_List)
+                                        Your_score(Length_of_snake - 1)
+                                        pygame.display.update()
+                                        clock.tick(20)
+                                    with open('scores2.txt', 'a') as file:
+                                        file.write(str(score) + '\n')
+                                    pygame.quit()
+                                    quit()
+
+
+                                gameLoop()
+
+                            elif button_rect.collidepoint(mouse_pos):
+                                pygame.init()
+                                white = (255, 255, 255)
+                                yellow = (255, 255, 102)
+                                red = (213, 50, 80)
+                                green = (0, 255, 0)
+                                width = 500
+                                height = 500
+                                block = 10
+                                score_font = pygame.font.Font(None, 24)
+                                dis = pygame.display.set_mode((width, height))
+                                pygame.display.set_caption('Змейка')
+                                clock = pygame.time.Clock()
+                                background_image = pygame.image.load("background.jpg")
+                                background_image = pygame.transform.scale(background_image, (width, height))
+                                font_style = pygame.font.SysFont(None, 50)
+                                food_image = pygame.image.load("food.png")
+                                food_image = pygame.transform.scale(food_image, (block, block))
+                                snake_block_image = pygame.image.load("snake_block.png")
+                                snake_block_image = pygame.transform.scale(snake_block_image, (block, block))
+                                wall_image = pygame.image.load("wall.png")
+                                wall_image = pygame.transform.scale(wall_image, (block, block))
+
+
+                                def message(msg, color):
+                                    mesg = font_style.render(msg, True, color)
+                                    dis.blit(mesg, [width / 6, height / 3])
+
+
+                                def our_snake(block, snake_list):
+                                    for x in snake_list:
+                                        dis.blit(snake_block_image, (x[0], x[1]))
+
+
+                                def Your_score(score):
+                                    value = score_font.render("Ваш счёт: " + str(score), True, yellow)
+                                    dis.blit(value, [10, 10])
+
+
+                                def gameLoop():
+                                    score = 0
+                                    game_over = False
+                                    game_close = False
+                                    x1 = width / 2
+                                    y1 = height / 2
+                                    x1_change = 0
+                                    y1_change = 0
+                                    snake_List = []
+                                    Length_of_snake = 1
+                                    wall_layout = ["XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                                                   "X................................................X",
+                                                   "X................................................X",
+                                                   "X................................................X",
+                                                   "X...................................XXXX.........X",
+                                                   "X...................................X............X",
+                                                   "X...XXXXXXXXXXXXXX..................X............X",
+                                                   "X....................................X...........X",
+                                                   "X..............................XXXXXXXXX.........X",
+                                                   "X.......X........................................X",
+                                                   "X.....................................XXXXXXXX...X",
+                                                   "XXXXXXXXXXXXX..........XXXXXXXXXXX.......X.......X",
+                                                   "X.....................................X..........X",
+                                                   "X.................XXXXX...............XXXXXXXXX..X",
+                                                   "X............X........................X..........X",
+                                                   "X............X........................X..........X",
+                                                   "X............XXXXXXX..................X..........X",
+                                                   "X............X........................X..........X",
+                                                   "X............X........................X..........X",
+                                                   "X............X........................X..........X",
+                                                   "X............X........................X..........X",
+                                                   "X............X........................X..........X",
+                                                   "X............X...............XXXXXXXXXXX.........X",
+                                                   "X............X........................X..........X",
+                                                   "X............X......X.................X..........X",
+                                                   "X............X......X.................X..........X",
+                                                   "X............X........................X.......X..X",
+                                                   "X............X........................X.......X..X",
+                                                   "X............X........................X.......X..X",
+                                                   "X............X........................X.......X..X",
+                                                   "X............X.........XXXXXXXXXXXXXXXX.......X..X",
+                                                   "X............X........................X..........X",
+                                                   "X............X........................X..........X",
+                                                   "X................................................X",
+                                                   "X................................................X",
+                                                   "X.................XXXXXXXXX......X...XXX.....X...X",
+                                                   "X...............................XXXXXX...X.......X",
+                                                   "X.....XXX......................XX........X.......X",
+                                                   "X.......X....................XXX....XXX.XX.......X",
+                                                   "X.......X...........................X............X",
+                                                   "X.......X...........................X............X",
+                                                   "X.......XXXXXXXXXX..........XXXXXXXXX............X",
+                                                   "X...................................X............X",
+                                                   "X...................................X............X",
+                                                   "X...................................X............X",
+                                                   "X................................................X",
+                                                   "X................................................X",
+                                                   "X......................XX..X.....................X",
+                                                   "X................................................X",
+                                                   "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                                                   ]
+                                    while True:
+                                        foodx = round(random.randrange(0, width - block) / block) * block
+                                        foody = round(random.randrange(0, height - block) / block) * block
+                                        if foodx % block == 0 and foody % block == 0:
+                                            if not wall_layout[int(foody / block)][int(foodx / block)] == "X":
+                                                break
+
+                                    while not game_over:
+                                        while game_close == True:
+                                            dis.blit(background_image, (0, 0))
+                                            message("Q Выйти W Играть", red)
+                                            pygame.display.update()
+                                            for event in pygame.event.get():
+                                                if event.type == pygame.KEYDOWN:
+                                                    if event.key == pygame.K_q:
+                                                        game_over = True
+                                                        game_close = False
+                                                    if event.key == pygame.K_w:
+                                                        gameLoop()
+                                        for event in pygame.event.get():
+                                            if event.type == pygame.QUIT:
+                                                game_over = True
+                                            if event.type == pygame.KEYDOWN:
+                                                if event.key == pygame.K_LEFT:
+                                                    x1_change = -block
+                                                    y1_change = 0
+                                                elif event.key == pygame.K_RIGHT:
+                                                    x1_change = block
+                                                    y1_change = 0
+                                                elif event.key == pygame.K_UP:
+                                                    y1_change = -block
+                                                    x1_change = 0
+                                                elif event.key == pygame.K_DOWN:
+                                                    y1_change = block
+                                                    x1_change = 0
+                                        if x1 >= width or x1 < 0 or y1 >= height or y1 < 0:
+                                            game_close = True
+                                        if [x1, y1] in snake_List[:-1]:
+                                            game_close = True
+                                        x1 += x1_change
+                                        y1 += y1_change
+                                        snake_Head = []
+                                        snake_Head.append(x1)
+                                        snake_Head.append(y1)
+                                        snake_List.append(snake_Head)
+                                        pygame.time.delay(55)
+                                        if len(snake_List) > Length_of_snake:
+                                            del snake_List[0]
+
+                                        dis.blit(background_image, (0, 0))
+                                        dis.blit(food_image, (foodx, foody))
+                                        our_snake(block, snake_List)
+                                        if x1 == foodx and y1 == foody:
+                                            while True:
+                                                foodx = round(random.randrange(0, width - block) / block) * block
+                                                foody = round(random.randrange(0, height - block) / block) * block
+                                                if foodx % block == 0 and foody % block == 0:
+                                                    if not wall_layout[int(foody / block)][int(foodx / block)] == "X":
+                                                        break
+                                            Length_of_snake += 1
+                                            score += 1
+                                        for i in range(len(wall_layout)):
+                                            for j in range(len(wall_layout[i])):
+                                                if wall_layout[i][j] == "X" and x1 == j * block and y1 == i * block:
+                                                    game_close = True
+                                        for i in range(len(wall_layout)):
+                                            for j in range(len(wall_layout[i])):
+                                                if wall_layout[i][j] == "X":
+                                                    dis.blit(wall_image, ([j * block, i * block, block, block]))
+                                        pygame.draw.rect(dis, red, [foodx, foody, block, block])
+                                        dis.blit(food_image, (foodx, foody))
+                                        our_snake(block, snake_List)
+                                        Your_score(Length_of_snake - 1)
+                                        pygame.display.update()
+                                        clock.tick(20)
+                                    with open('scores3.txt', 'a') as file:
+                                        file.write(str(score) + '\n')
+                                    pygame.quit()
+                                    quit()
+
+
+                                gameLoop()
+                            elif button_rect2.collidepoint(mouse_pos):
+                                pygame.init()
+                                white = (255, 255, 255)
+                                yellow = (255, 255, 102)
+                                black = (0, 0, 0)
+                                red = (213, 50, 80)
+                                green = (0, 255, 0)
+                                blue = (50, 153, 213)
+                                width = 500
+                                height = 500
+                                block = 10
+                                score_font = pygame.font.Font(None, 24)
+                                dis = pygame.display.set_mode((width, height))
+                                pygame.display.set_caption('Змейка')
+                                clock = pygame.time.Clock()
+                                background_image = pygame.image.load("background2.jpg")
+                                background_image = pygame.transform.scale(background_image, (width, height))
+                                font_style = pygame.font.SysFont(None, 50)
+                                food_image = pygame.image.load("food2.png")
+                                food_image = pygame.transform.scale(food_image, (block, block))
+                                snake_block_image = pygame.image.load("snake_block2.png")
+                                snake_block_image = pygame.transform.scale(snake_block_image, (block, block))
+                                wall_image = pygame.image.load("wall2.png")
+                                wall_image = pygame.transform.scale(wall_image, (block, block))
+
+
+                                def message(msg, color):
+                                    mesg = font_style.render(msg, True, color)
+                                    dis.blit(mesg, [width / 6, height / 3])
+
+
+                                def our_snake(block, snake_list):
+                                    for x in snake_list:
+                                        dis.blit(snake_block_image, (x[0], x[1]))
+
+
+                                def Your_score(score):
+                                    value = score_font.render("Ваш счёт: " + str(score), True, red)
+                                    dis.blit(value, [10, 10])
+
+
+                                def gameLoop():
+                                    score = 0
+                                    game_over = False
+                                    game_close = False
+                                    x1 = width / 2
+                                    y1 = height / 2
+                                    x1_change = 0
+                                    y1_change = 0
+                                    snake_List = []
+                                    Length_of_snake = 1
+                                    wall_layout = [
+                                        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "X................................................X",
+                                        "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
+                                    ]
+                                    while True:
+                                        foodx = round(random.randrange(0, width - block) / block) * block
+                                        foody = round(random.randrange(0, height - block) / block) * block
+                                        if foodx % block == 0 and foody % block == 0:
+                                            if not wall_layout[int(foody / block)][int(foodx / block)] == "X":
+                                                break
+
+                                    while not game_over:
+                                        while game_close == True:
+                                            dis.blit(background_image, (0, 0))
+                                            message("Q Выйти W Играть", red)
+                                            pygame.display.update()
+                                            for event in pygame.event.get():
+                                                if event.type == pygame.KEYDOWN:
+                                                    if event.key == pygame.K_q:
+                                                        game_over = True
+                                                        game_close = False
+                                                    if event.key == pygame.K_w:
+                                                        gameLoop()
+                                        for event in pygame.event.get():
+                                            if event.type == pygame.QUIT:
+                                                game_over = True
+                                            if event.type == pygame.KEYDOWN:
+                                                if event.key == pygame.K_LEFT:
+                                                    x1_change = -block
+                                                    y1_change = 0
+                                                elif event.key == pygame.K_RIGHT:
+                                                    x1_change = block
+                                                    y1_change = 0
+                                                elif event.key == pygame.K_UP:
+                                                    y1_change = -block
+                                                    x1_change = 0
+                                                elif event.key == pygame.K_DOWN:
+                                                    y1_change = block
+                                                    x1_change = 0
+                                        if x1 >= width or x1 < 0 or y1 >= height or y1 < 0:
+                                            game_close = True
+                                        if [x1, y1] in snake_List[:-1]:
+                                            game_close = True
+                                        x1 += x1_change
+                                        y1 += y1_change
+                                        snake_Head = []
+                                        snake_Head.append(x1)
+                                        snake_Head.append(y1)
+                                        snake_List.append(snake_Head)
+                                        pygame.time.delay(-1000)
+                                        if len(snake_List) > Length_of_snake:
+                                            del snake_List[0]
+
+                                        dis.blit(background_image, (0, 0))
+                                        dis.blit(food_image, (foodx, foody))
+                                        our_snake(block, snake_List)
+                                        if x1 == foodx and y1 == foody:
+                                            while True:
+                                                foodx = round(random.randrange(0, width - block) / block) * block
+                                                foody = round(random.randrange(0, height - block) / block) * block
+                                                if foodx % block == 0 and foody % block == 0:
+                                                    if not wall_layout[int(foody / block)][int(foodx / block)] == "X":
+                                                        break
+                                            Length_of_snake += 1
+                                            score += 1
+                                        for i in range(len(wall_layout)):
+                                            for j in range(len(wall_layout[i])):
+                                                if wall_layout[i][j] == "X" and x1 == j * block and y1 == i * block:
+                                                    game_close = True
+                                        for i in range(len(wall_layout)):
+                                            for j in range(len(wall_layout[i])):
+                                                if wall_layout[i][j] == "X":
+                                                    dis.blit(wall_image, ([j * block, i * block, block, block]))
+                                        pygame.draw.rect(dis, red, [foodx, foody, block, block])
+                                        dis.blit(food_image, (foodx, foody))
+                                        our_snake(block, snake_List)
+                                        Your_score(Length_of_snake - 1)
+                                        pygame.display.update()
+                                        clock.tick(20)
+                                    pygame.quit()
+                                    quit()
+
+
+                                gameLoop()
+
+                    start_button_rect = pygame.draw.rect(screen, GR, (150, 100, 200, 50))
+                    draw_text("1 lvl", pygame.font.Font(None, 36), WHITE, screen, 250, 125)
+
+                    button_rect1 = pygame.draw.rect(screen, GR, (150, 200, 200, 50))
+                    draw_text("2 lvl", pygame.font.Font(None, 36), WHITE, screen, 250, 225)
+
+                    button_rect = pygame.draw.rect(screen, GR, (150, 300, 200, 50))
+                    draw_text("3 lvl", pygame.font.Font(None, 36), WHITE, screen, 250, 325)
+
+                    button_rect2 = pygame.draw.rect(screen, GR, (320, 460, 150, 30))
+                    draw_text("бонус", pygame.font.Font(None, 36), WHITE, screen, 390, 475)
+                    pygame.display.update()
+
+            elif exit_button_rect.collidepoint(mouse_pos):
+                pygame.quit()
+                sys.exit()
+    draw_text("Рекорд(1 lvl): " + str(get_high_score()), pygame.font.Font(None, 36), WHITE, screen, 130, 30)
+    draw_text("Рекорд(2 lvl): " + str(get_high_score2()), pygame.font.Font(None, 36), WHITE, screen, 130, 60)
+    draw_text("Рекорд(3 lvl): " + str(get_high_score3()), pygame.font.Font(None, 36), WHITE, screen, 130, 90)
+    start_button_rect = pygame.draw.rect(screen, GR, (150, 200, 200, 50))
+    draw_text("Старт", pygame.font.Font(None, 36), WHITE, screen, 250, 225)
+
+    exit_button_rect = pygame.draw.rect(screen, GR, (150, 300, 200, 50))
+    draw_text("Выйти", pygame.font.Font(None, 36), WHITE, screen, 250, 325)
+
+    pygame.display.update()
